@@ -1,8 +1,9 @@
 # EOS Github Project: EOS TOY
 
 Firebase Database for Android 예제입니다.
+
 What is Firebase:
--Google
+- Google
 
 ## Support
 프로젝트 담당자: 김태향 zzoroak@gmail.com
