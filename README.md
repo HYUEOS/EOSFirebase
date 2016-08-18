@@ -1,4 +1,4 @@
-# EOS Github Project: EOS TOY
+# EOS Github Project: EOSFirebase
 
 Firebase Database Android 예제입니다. </BR>(Firebase는 Google에서 제공하는 Cloud 플랫폼입니다.)
 
