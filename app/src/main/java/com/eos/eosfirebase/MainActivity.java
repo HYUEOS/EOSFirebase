@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.eos.eosfirebase.models.Data;
@@ -16,6 +17,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -27,7 +29,6 @@ public class MainActivity extends AppCompatActivity {
     private EditText editTextName;
     private EditText editTextContact;
     private Button buttonAdd;
-    private TextView textViewData;
 
     //Declare Database Reference
     private DatabaseReference mDatabase;
@@ -40,55 +41,37 @@ public class MainActivity extends AppCompatActivity {
         //Initialize database referenceddd
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
-        buttonAdd = (Button)findViewById(R.id.buttonAdd);
-        editTextContact = (EditText)findViewById(R.id.editTextContact);
-        editTextName = (EditText)findViewById(R.id.editTextName);
-        textViewData = (TextView)findViewById(R.id.textViewData);
+        buttonAdd = (Button) findViewById(R.id.buttonAdd);
+        editTextContact = (EditText) findViewById(R.id.editTextContact);
+        editTextName = (EditText) findViewById(R.id.editTextName);
 
-        buttonAdd.setOnClickListener(new View.OnClickListener(){
+
+        buttonAdd.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view){
-                    submitData();
-
-                //Read and Display Database
-               mDatabase.addValueEventListener(new ValueEventListener() {
-                   @Override
-                   public void onDataChange(DataSnapshot snapshot) {
-                       for(DataSnapshot dataSnapshot : snapshot.getChildren()){
-                           Data data = dataSnapshot.getValue(Data.class);
-                           dataSnapshot.getChildren().getClass();
-                           String text = "이름: " + data.getName() + "\n전화번호: " + data.getContact() + "\n\n";
-                           textViewData.setText(text);
-                       }
-                   }
-
-                   @Override
-                   public void onCancelled(DatabaseError databaseError) {
-                       Log.w("zzoroak", "Data Read Cancelled", databaseError.toException());
-                   }
-               });
+            public void onClick(View view) {
+                submitData();
             }
         });
     }
 
-    private void submitData(){
+    private void submitData() {
         final String name = editTextName.getText().toString();
         final String contact = editTextContact.getText().toString();
 
         //Name is required
-        if(TextUtils.isEmpty(name)){
+        if (TextUtils.isEmpty(name)) {
             editTextName.setError(REQUIRED);
             return;
         }
 
         //Contact is required
-        if(TextUtils.isEmpty(contact)){
+        if (TextUtils.isEmpty(contact)) {
             editTextContact.setError(REQUIRED);
             return;
         }
 
         //Single Value Read
-        mDatabase.child("names").child(name).addListenerForSingleValueEvent(
+        mDatabase.child("data").child(name).addListenerForSingleValueEvent(
                 new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
@@ -104,13 +87,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     //Create New Data
-    private void writeNewData(String name, String contact){
-        String key = mDatabase.child("names").push().getKey();
+    private void writeNewData(String name, String contact) {
+        String key = mDatabase.child("users").push().getKey();
         Data data = new Data(name, contact);
         Map<String, Object> values = data.toMap();
 
         Map<String, Object> dataUpdates = new HashMap<>();
-        dataUpdates.put("/data/"+ key, values);
+        dataUpdates.put("/data/" + key, values);
 
         mDatabase.updateChildren(dataUpdates);
     }
