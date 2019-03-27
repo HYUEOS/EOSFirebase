@@ -16,6 +16,4 @@ Firebase 주요 기능:
 세부 기능은 [Google Firebase](https://firebase.google.com) 참조
 
 ## Support
-프로젝트 담당자: 김태향 zzoroak@gmail.com
-
 Visit our Blog, [EOS Tistory](http://hyu-eos.tistory.com)
